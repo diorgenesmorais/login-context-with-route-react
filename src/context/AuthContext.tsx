@@ -13,9 +13,9 @@ export interface IAuthContext extends IUser {
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export const AuthProvider = ({ children }: { children: JSX.Element}) => {
-    const { loading, isAuthenticated, login, logout } = useAuth();
+    const { isPending, isAuthenticated, login, logout } = useAuth();
 
-    if (loading) {
+    if (isPending) {
         return <h2>Loading...</h2>
     }
 

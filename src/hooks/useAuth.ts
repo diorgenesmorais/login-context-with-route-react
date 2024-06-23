@@ -1,17 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { getUserLocalStorage, setUserLocalStorage } from "../context/util";
 
 export default function useAuth() {
+    const [isPending, startTransition] = useTransition();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const hasCalledLocalStorage = useRef(false);
 
     useEffect(() => {
-        // como esse processo leva um pouco mais tempo do que a redenrização de AuthProvider
-        const user = getUserLocalStorage();
-        if (user.isAuthenticated) {
-            setIsAuthenticated(true);
-        }
-        setLoading(false);
+        startTransition(() => {
+            // garantir que só vai chamar o código abaixo apenas uma vez
+            if (!isAuthenticated && hasCalledLocalStorage.current) return;
+            hasCalledLocalStorage.current = true;
+    
+            // como esse processo leva um pouco mais tempo do que a redenrização de AuthProvider
+            const user = getUserLocalStorage();
+            if (user.isAuthenticated) {
+                setIsAuthenticated(true);
+            }
+        });
     }, []);
 
     const login = () => {
@@ -24,5 +30,5 @@ export default function useAuth() {
         setUserLocalStorage({ isAuthenticated: false });
     };
 
-    return { loading, isAuthenticated, login, logout };
+    return { isPending, isAuthenticated, login, logout };
 }
