@@ -1,13 +1,17 @@
-import React, { useContext } from 'react'
-import { AuthContext } from "../../context/AuthContext"
-import { Navigate } from 'react-router-dom'
+import React, { useContext } from "react";
+import { AppContext } from "../../context/AppContext";
+import { Navigate } from "react-router-dom";
 
-export const RequireAuth: React.FC<{children: JSX.Element}> = ({ children }: { children: JSX.Element}) => {
-    const { isAuthenticated } = useContext(AuthContext);
+type Props = {
+    children: JSX.Element;
+};
+
+export const RequireAuth: React.FC<Props> = ({ children }: Props) => {
+    const { isAuthenticated } = useContext(AppContext);
 
     if (!isAuthenticated) {
-        return <Navigate to="/" />
+        return <Navigate to="/" />;
     }
 
-    return children
-}
+    return children;
+};
