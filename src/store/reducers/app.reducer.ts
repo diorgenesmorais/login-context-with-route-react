@@ -2,7 +2,7 @@ import { QuestionQueueActions } from "../actions/question.action";
 import { IAppState } from "../states/app.state";
 import { questionReducer } from "./question.reducer";
 
-type AppActions = QuestionQueueActions;
+export type AppActions = QuestionQueueActions;
 
 type ReducersMapObject<S, A> = {
     [K in keyof S]: (state: S[K], action: A) => S[K];
