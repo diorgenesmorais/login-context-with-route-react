@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useContext, useEffect, useRef } from "react";
 import { AppContext } from "../../context/AppContext";
 import {
     AddQuestion,
@@ -8,29 +8,29 @@ import {
 
 export const Chat: React.FC = () => {
     const { logout, state, dispatch } = useContext(AppContext);
-    const [questionUser, setQuestionUser] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
     const {
         questionQueue: { questions },
     } = state;
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            dispatch(
-                new AddQuestion({
-                    id: crypto.randomUUID(),
-                    question: questionUser,
-                })
-            );
-            setQuestionUser("");
-            inputRef.current?.focus();
+    const handleSubmit = (event: FormEvent) => {
+        event.preventDefault();
+        const value = inputRef?.current?.value ?? "";
+        dispatch(
+            new AddQuestion({
+                id: crypto.randomUUID(),
+                question: value,
+            })
+        );
+        if (inputRef.current) {
+            inputRef.current.value = "";
         }
+        inputRef.current?.focus();
     };
 
     useEffect(() => {
-        inputRef.current?.focus();
-    }, [state.questionQueue.questions]);
+        inputRef?.current?.focus();
+    }, [questions]);
 
     return (
         <div className="flex items-center justify-center h-screen">
@@ -69,13 +69,9 @@ export const Chat: React.FC = () => {
                         );
                     })}
                 </ul>
-                <input
-                    type="text"
-                    value={questionUser}
-                    onChange={(event) => setQuestionUser(event.target.value)}
-                    onKeyDown={handleKeyDown}
-                    ref={inputRef}
-                />
+                <form onSubmit={handleSubmit}>
+                    <input type="text" ref={inputRef} />
+                </form>
             </div>
         </div>
     );
