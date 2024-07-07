@@ -1,9 +1,9 @@
-import React, { FormEvent, useContext, useEffect, useRef } from "react";
-import { AppContext } from "../../context/AppContext";
+import React, { FormEvent, useEffect, useRef } from "react";
 import { questionAction } from "../../store/actions/question.action";
+import useAppContext from "../../hooks/useAppContext";
 
 export const Chat: React.FC = () => {
-    const { logout, state, dispatch } = useContext(AppContext);
+    const { logout, state, dispatch } = useAppContext();
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleSubmit = (event: FormEvent) => {
