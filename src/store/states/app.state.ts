@@ -1,12 +1,12 @@
-import {
-    IQuestionQueueState,
-    questionQueueInitialState,
-} from "./question.state";
+import { IChatHistory } from "../../interfaces";
+import { IQuestion } from "../actions/question.action";
 
 export interface IAppState {
-    questionQueue: IQuestionQueueState;
+    questions: IQuestion[];
+    history: IChatHistory[];
 }
 
 export const initialState: IAppState = {
-    questionQueue: questionQueueInitialState,
+    questions: [],
+    history: [],
 };

@@ -1,27 +1,18 @@
 import React, { FormEvent, useContext, useEffect, useRef } from "react";
 import { AppContext } from "../../context/AppContext";
-import {
-    AddQuestion,
-    RemoveQuestion,
-    ResetQuestionQueue,
-} from "../../store/actions/question.action";
+import { questionAction } from "../../store/actions/question.action";
 
 export const Chat: React.FC = () => {
     const { logout, state, dispatch } = useContext(AppContext);
     const inputRef = useRef<HTMLInputElement>(null);
-    const {
-        questionQueue: { questions },
-    } = state;
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
         const value = inputRef?.current?.value ?? "";
-        dispatch(
-            new AddQuestion({
-                id: crypto.randomUUID(),
-                question: value,
-            })
-        );
+        dispatch({
+            type: questionAction.ADD_QUESTION,
+            payload: { id: crypto.randomUUID(), question: value },
+        });
         if (inputRef.current) {
             inputRef.current.value = "";
         }
@@ -30,7 +21,7 @@ export const Chat: React.FC = () => {
 
     useEffect(() => {
         inputRef?.current?.focus();
-    }, [questions]);
+    }, [state.questions]);
 
     return (
         <div className="flex items-center justify-center h-screen">
@@ -44,7 +35,9 @@ export const Chat: React.FC = () => {
                     </button>
                     <button
                         className="w-48 ml-2 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg mb-6"
-                        onClick={() => dispatch(new ResetQuestionQueue())}
+                        onClick={() =>
+                            dispatch({ type: questionAction.RESET_QUEUE })
+                        }
                     >
                         Resetar lista
                     </button>
@@ -53,14 +46,17 @@ export const Chat: React.FC = () => {
                     Meu chat
                 </h2>
                 <ul className="mb-4 text-start">
-                    {questions.map(({ question, id }, i) => {
+                    {state.questions.map(({ question, id }, i) => {
                         return (
                             <li key={i}>
                                 {question} -{" "}
                                 <a
                                     href="#"
                                     onClick={() =>
-                                        dispatch(new RemoveQuestion({ id }))
+                                        dispatch({
+                                            type: questionAction.REMOVE_QUESTION,
+                                            payload: { id },
+                                        })
                                     }
                                 >
                                     X

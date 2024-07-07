@@ -1,6 +1,6 @@
 import { createContext, useReducer } from "react";
 import useAuth from "../hooks/useAuth";
-import mainReducer, { AppActions } from "../store/reducers/app.reducer";
+import { AppActions, mainReducer } from "../store/reducers/app.reducer";
 import { IAppState, initialState } from "../store/states/app.state";
 
 export interface IUser {
