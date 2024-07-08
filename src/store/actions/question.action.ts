@@ -9,18 +9,29 @@ export interface IQuestion {
     question?: string;
 }
 
-export type AddQuestion = {
+export type QuestionQueueActions = {
     readonly type: questionAction.ADD_QUESTION;
     payload: IQuestion;
-};
-export type RemoveQuestion = {
+} | {
     readonly type: questionAction.REMOVE_QUESTION;
     payload: IQuestion;
-};
-export type ResetQuestionQueue = {
+} | {
     readonly type: questionAction.RESET_QUEUE;
 };
-export type QuestionQueueActions =
-    | AddQuestion
-    | RemoveQuestion
-    | ResetQuestionQueue;
+
+export const addQuestion = (question: string): QuestionQueueActions => {
+    return {
+        type: questionAction.ADD_QUESTION,
+        payload: {
+            id: crypto.randomUUID(),
+            question
+        }
+    }
+}
+export const removeQuestion = (id: string): QuestionQueueActions => {
+    return {
+        type: questionAction.REMOVE_QUESTION,
+        payload: {id}
+    }
+}
+export const cleanQuestions = (): QuestionQueueActions => ({type: questionAction.RESET_QUEUE});

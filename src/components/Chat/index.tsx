@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useRef } from "react";
-import { questionAction } from "../../store/actions/question.action";
+import { addQuestion, cleanQuestions, removeQuestion } from "../../store/actions/question.action";
 import useAppContext from "../../hooks/useAppContext";
 import ChatHistory from "../ChatHistory";
 
@@ -10,10 +10,7 @@ export const Chat: React.FC = () => {
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
         const value = inputRef?.current?.value ?? "";
-        dispatch({
-            type: questionAction.ADD_QUESTION,
-            payload: { id: crypto.randomUUID(), question: value },
-        });
+        dispatch(addQuestion(value));
         if (inputRef.current) {
             inputRef.current.value = "";
         }
@@ -38,7 +35,7 @@ export const Chat: React.FC = () => {
                     <button
                         className="w-48 ml-2 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg mb-6"
                         onClick={() =>
-                            dispatch({ type: questionAction.RESET_QUEUE })
+                            dispatch(cleanQuestions())
                         }
                     >
                         Resetar lista
@@ -55,10 +52,7 @@ export const Chat: React.FC = () => {
                                 <a
                                     href="#"
                                     onClick={() =>
-                                        dispatch({
-                                            type: questionAction.REMOVE_QUESTION,
-                                            payload: { id },
-                                        })
+                                        dispatch(removeQuestion(id))
                                     }
                                 >
                                     X
