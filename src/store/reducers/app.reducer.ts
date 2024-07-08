@@ -1,3 +1,4 @@
+import { IChatHistory } from "../../interfaces";
 import { HistoryActions, historyAction } from "../actions/history.action";
 import {
     QuestionQueueActions,
@@ -13,6 +14,10 @@ export const mainReducer = (state: IAppState, action: AppActions) => {
             return {
                 ...state,
                 questions: [...state.questions, action.payload],
+                history: [
+                    ...state.history,
+                    addToHistory(action.payload.question!),
+                ],
             };
         case questionAction.REMOVE_QUESTION:
             return {
@@ -39,4 +44,8 @@ export const mainReducer = (state: IAppState, action: AppActions) => {
         default:
             return state;
     }
+};
+
+const addToHistory = (content: string): IChatHistory => {
+    return { role: "user", content: content };
 };

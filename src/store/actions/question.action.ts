@@ -1,7 +1,7 @@
 export enum questionAction {
-    ADD_QUESTION,
-    REMOVE_QUESTION,
-    RESET_QUEUE,
+    ADD_QUESTION = "add question",
+    REMOVE_QUESTION = "remove question",
+    RESET_QUEUE = "reset queue",
 }
 
 export interface IQuestion {

@@ -1,6 +1,7 @@
 import React, { FormEvent, useEffect, useRef } from "react";
 import { questionAction } from "../../store/actions/question.action";
 import useAppContext from "../../hooks/useAppContext";
+import ChatHistory from "../ChatHistory";
 
 export const Chat: React.FC = () => {
     const { logout, state, dispatch } = useAppContext();
@@ -26,7 +27,8 @@ export const Chat: React.FC = () => {
     return (
         <div className="flex items-center justify-center h-screen">
             <div className="text-center">
-                <div>
+                <ChatHistory />
+                <div className="mt-8">
                     <button
                         className="w-24 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg mb-6"
                         onClick={logout}

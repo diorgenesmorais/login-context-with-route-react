@@ -1,16 +1,25 @@
 import { IChatHistory } from "../../interfaces";
 
 export enum historyAction {
-    ADD_CONVERSATION,
-    RESET_HISTORY,
+    ADD_CONVERSATION = "add conversation",
+    RESET_HISTORY = "reset history",
 }
 
-export type AddConversation = {
+export type HistoryActions = {
     readonly type: historyAction.ADD_CONVERSATION;
     payload: IChatHistory;
-};
-export type ResetHistory = {
+} | {
     readonly type: historyAction.RESET_HISTORY;
 };
 
-export type HistoryActions = AddConversation | ResetHistory;
+export const addHistory = (payload: IChatHistory): HistoryActions => {
+    return {
+        type: historyAction.ADD_CONVERSATION,
+        payload,
+    };
+};
+export const resetHistory = (): HistoryActions => {
+    return {
+        type: historyAction.RESET_HISTORY,
+    };
+};
