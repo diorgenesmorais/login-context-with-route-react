@@ -1,13 +1,14 @@
-import React, { FormEvent, useEffect, useRef } from "react";
-import { addQuestion, cleanQuestions, removeQuestion } from "../../store/actions/question.action";
+import React, { FormEvent, useCallback, useEffect, useRef } from "react";
+import { addQuestion } from "../../store/actions/question.action";
 import useAppContext from "../../hooks/useAppContext";
 import ChatHistory from "../ChatHistory";
+import { resetHistory } from "../../store/actions/history.action";
 
 export const Chat: React.FC = () => {
     const { logout, state, dispatch } = useAppContext();
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleSubmit = (event: FormEvent) => {
+    const handleSubmit = useCallback((event: FormEvent) => {
         event.preventDefault();
         const value = inputRef?.current?.value ?? "";
         dispatch(addQuestion(value));
@@ -15,7 +16,7 @@ export const Chat: React.FC = () => {
             inputRef.current.value = "";
         }
         inputRef.current?.focus();
-    };
+    }, [dispatch]);
 
     useEffect(() => {
         inputRef?.current?.focus();
@@ -35,7 +36,7 @@ export const Chat: React.FC = () => {
                     <button
                         className="w-48 ml-2 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg mb-6"
                         onClick={() =>
-                            dispatch(cleanQuestions())
+                            dispatch(resetHistory())
                         }
                     >
                         Resetar lista
@@ -44,7 +45,7 @@ export const Chat: React.FC = () => {
                 <h2 className="text-2xl font-bold mb-6 text-center">
                     Meu chat
                 </h2>
-                <ul className="mb-4 text-start">
+                {/* <ul className="mb-4 text-start">
                     {state.questions.map(({ question, id }, i) => {
                         return (
                             <li key={i}>
@@ -60,7 +61,7 @@ export const Chat: React.FC = () => {
                             </li>
                         );
                     })}
-                </ul>
+                </ul> */}
                 <form onSubmit={handleSubmit}>
                     <input type="text" ref={inputRef} />
                 </form>
