@@ -1,25 +1,40 @@
-import React, { FormEvent, useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect } from "react";
 import { addQuestion } from "../../store/actions/question.action";
 import useAppContext from "../../hooks/useAppContext";
 import ChatHistory from "../ChatHistory";
 import { resetHistory } from "../../store/actions/history.action";
+import eventEmitter from "../../utils/eventEmitter";
+import { useForm } from 'react-hook-form';
+
+type FormData = {
+    question: string;
+}
 
 export const Chat: React.FC = () => {
     const { logout, state, dispatch } = useAppContext();
-    const inputRef = useRef<HTMLInputElement>(null);
-
-    const handleSubmit = useCallback((event: FormEvent) => {
-        event.preventDefault();
-        const value = inputRef?.current?.value ?? "";
-        dispatch(addQuestion(value));
-        if (inputRef.current) {
-            inputRef.current.value = "";
+    const { handleSubmit, register, reset} = useForm<FormData>({
+        defaultValues: {
+            question: ''
         }
-        inputRef.current?.focus();
-    }, [dispatch]);
+    });
+
+    const handleSubmitForm = useCallback((data: FormData) => {
+        dispatch(addQuestion(data.question));
+        reset({question: ''});
+    }, [dispatch, reset]);
 
     useEffect(() => {
-        inputRef?.current?.focus();
+        const submitText = () => {
+            console.log('submit text function', state.questions[state.questions.length - 1]);
+        }
+
+        eventEmitter.subscribe('submit-text', submitText);
+
+        return () => eventEmitter.unsubscribe('submit-text', submitText);
+    }, [state.questions]);
+
+    useEffect(() => {
+        eventEmitter.emit('submit-text');
     }, [state.questions]);
 
     return (
@@ -62,8 +77,8 @@ export const Chat: React.FC = () => {
                         );
                     })}
                 </ul> */}
-                <form onSubmit={handleSubmit}>
-                    <input type="text" ref={inputRef} />
+                <form onSubmit={handleSubmit(handleSubmitForm)}>
+                    <input type="text" {...register('question')} placeholder="Faça a sua pergunta" />
                 </form>
             </div>
         </div>
