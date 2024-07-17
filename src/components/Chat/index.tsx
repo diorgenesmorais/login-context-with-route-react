@@ -1,41 +1,13 @@
-import React, { useCallback, useEffect } from "react";
-import { addQuestion } from "../../store/actions/question.action";
+import React from "react";
 import useAppContext from "../../hooks/useAppContext";
 import ChatHistory from "../ChatHistory";
 import { resetHistory } from "../../store/actions/history.action";
-import eventEmitter from "../../utils/eventEmitter";
-import { useForm } from 'react-hook-form';
-
-type FormData = {
-    question: string;
-}
+import useQuestion from "./useQuestion";
 
 export const Chat: React.FC = () => {
-    const { logout, state, dispatch } = useAppContext();
-    const { handleSubmit, register, reset} = useForm<FormData>({
-        defaultValues: {
-            question: ''
-        }
-    });
-
-    const handleSubmitForm = useCallback((data: FormData) => {
-        dispatch(addQuestion(data.question));
-        reset({question: ''});
-    }, [dispatch, reset]);
-
-    useEffect(() => {
-        const submitText = () => {
-            console.log('submit text function', state.questions[state.questions.length - 1]);
-        }
-
-        eventEmitter.subscribe('submit-text', submitText);
-
-        return () => eventEmitter.unsubscribe('submit-text', submitText);
-    }, [state.questions]);
-
-    useEffect(() => {
-        eventEmitter.emit('submit-text');
-    }, [state.questions]);
+    const { logout, dispatch } = useAppContext();
+    const { handleSubmit, handleSubmitForm, register } = useQuestion();
+    
 
     return (
         <div className="flex items-center justify-center h-screen">
