@@ -1,5 +1,4 @@
-import { IChatHistory } from "../../interfaces";
-import { IQuestion } from "../actions/question.action";
+import { IChatHistory, IQuestion } from "../../interfaces";
 
 export interface IAppState {
     questions: IQuestion[];

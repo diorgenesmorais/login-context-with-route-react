@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import useAppContext from "../../hooks/useAppContext";
+import { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
 
 type ChatMessageProps = {
     content: string;
@@ -63,11 +64,11 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ content }: ChatMessageProps) 
 }
 
 const ChatHistory: React.FC = () => {
-    const { state } = useAppContext();
+    const history = useSelector((store: RootState) => store.main.history);
 
     return (
         <div>
-            {state.history.map((item, i) => {
+            {history.map((item, i) => {
                 return <ChatMessage key={i} content={item.content} />
             })}
         </div>

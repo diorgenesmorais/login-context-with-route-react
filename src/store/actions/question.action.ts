@@ -1,12 +1,9 @@
+import { IQuestion } from "../../interfaces";
+
 export enum questionAction {
     ADD_QUESTION = "add question",
     REMOVE_QUESTION = "remove question",
     RESET_QUEUE = "reset queue",
-}
-
-export interface IQuestion {
-    id: string;
-    question?: string;
 }
 
 export type QuestionQueueActions = {
@@ -28,10 +25,10 @@ export const addQuestion = (question: string): QuestionQueueActions => {
         }
     }
 }
-export const removeQuestion = (id: string): QuestionQueueActions => {
-    return {
-        type: questionAction.REMOVE_QUESTION,
-        payload: {id}
-    }
-}
+// export const removeQuestion = (id: string): QuestionQueueActions => {
+//     return {
+//         type: questionAction.REMOVE_QUESTION,
+//         payload: {id}
+//     }
+// }
 export const cleanQuestions = (): QuestionQueueActions => ({type: questionAction.RESET_QUEUE});

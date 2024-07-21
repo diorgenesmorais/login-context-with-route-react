@@ -1,15 +1,17 @@
 import { useForm } from "react-hook-form";
-import useAppContext from "../../hooks/useAppContext";
 import { useCallback, useEffect } from "react";
-import { addQuestion } from "../../store/actions/question.action";
 import eventEmitter from "../../utils/eventEmitter";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { addQuestion } from "../../redux/mainSlice";
 
 type FormData = {
     question: string;
 }
 
 const useQuestion = () => {
-    const { state, dispatch } = useAppContext();
+    const dispatch = useDispatch<AppDispatch>();
+    const questions = useSelector((store: RootState) => store.main.questions);
     const { handleSubmit, register, reset} = useForm<FormData>({
         defaultValues: {
             question: ''
@@ -19,21 +21,21 @@ const useQuestion = () => {
     const handleSubmitForm = useCallback((data: FormData) => {
         dispatch(addQuestion(data.question));
         reset({question: ''});
-    }, [dispatch, reset]);
+    }, [dispatch, reset])
 
     useEffect(() => {
         const submitText = () => {
-            console.log('submit text function', state.questions[state.questions.length - 1]);
+            console.log('submit text function', questions[questions.length - 1]);
         }
 
         eventEmitter.subscribe('submit-text', submitText);
 
         return () => eventEmitter.unsubscribe('submit-text', submitText);
-    }, [state.questions]);
+    }, [questions]);
 
     useEffect(() => {
         eventEmitter.emit('submit-text');
-    }, [state.questions]);
+    }, [questions]);
 
     return {
         handleSubmit, register, handleSubmitForm
