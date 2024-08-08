@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 
-const Login: React.FC = () => {
+const Login = () => {
     const { login, isAuthenticated } = useContext(AppContext);
     const navigate = useNavigate();
 

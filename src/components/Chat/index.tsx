@@ -1,4 +1,3 @@
-import React from "react";
 import useAppContext from "../../hooks/useAppContext";
 import ChatHistory from "../ChatHistory";
 import useQuestion from "./useQuestion";
@@ -6,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { resetHistory } from "../../redux/mainSlice";
 
-export const Chat: React.FC = () => {
+export const Chat = () => {
     const { logout } = useAppContext();
     const dispatch = useDispatch<AppDispatch>();
     const { handleSubmit, handleSubmitForm, register } = useQuestion();

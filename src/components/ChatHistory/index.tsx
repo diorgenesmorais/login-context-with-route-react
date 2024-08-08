@@ -27,7 +27,7 @@ const createLetterObservable = (text: string, interval: number) => {
     }
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = ({ content }: ChatMessageProps) => {
+const ChatMessage = ({ content }: ChatMessageProps) => {
     const [fulltext, setFullText] = useState('');
     const [currentText, setCurrentText] = useState('');
     const [start, setStart] = useState(false);
@@ -63,7 +63,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ content }: ChatMessageProps) 
     )
 }
 
-const ChatHistory: React.FC = () => {
+const ChatHistory = () => {
     const history = useSelector((store: RootState) => store.main.history);
 
     return (
